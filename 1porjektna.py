@@ -129,35 +129,3 @@ class Stanje():
         with open(datoteka) as dat:
             slovar = json.load(dat)
             return Stanje.iz_slovarja(slovar)
-
-import json
-slovar = {'nina' : [1, 2, 3], 'janez' : ['ime', 1]}
-print(list(slovar))
-json.dumps(slovar)
-
-ime = 'ime'
-seznam = ['nina', 'miha', 'janez']
-slovar = {'nina' : [('n', 1), ('a', 2), ('l', 3, 4)], 'janez' : [('ime', 1), (1, 3)]}
-s = Skupina(ime, seznam, slovar)
-j = json.dumps(s.v_slovar())
-print(s.iz_slovarja(j))
-
-
-
-print(slovar.get('nina'))
-def koliko_je_placal(slovar):
-    
-    sez = []
-    for oseba, stroski in slovar.items():
-        sez.append((oseba, stroski))
-    return sez
-
-koliko_je_placal(slovar)
-        
-def v_slovar(skupine):
-        return {
-            "skupine": [skupina.v_slovar() for skupina in skupine],
-        }
-    
-skupine = ['a', 'b', 'c']
-v_slovar(skupine)
