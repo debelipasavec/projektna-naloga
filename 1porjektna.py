@@ -1,131 +1,160 @@
+from dataclasses import dataclass
 from datetime import date
+from typing import List
 import json
-
-class Oseba:
-    def __init__(self, kdo):
-        self.kdo = kdo
         
-    def spremeni_ime(self, novo_ime):
-        self.kdo = novo_ime
-    
+@dataclass        
+class Strosek:
+    datum: date
+    cena: float
+    kaj: str
+
     def v_slovar(self):
         return {
-            "ime": self.kdo,
+            "datum": self.datum.isoformat(),
+            "cena": self.cena,
+            "kaj": self.kaj,
         }
-    
-    @staticmethod
-    def iz_slovarja(slovar):
-        return Oseba(
-            slovar["ime"],
-        )
-slovar = {'ime':'Nina'}
-Oseba.iz_slovarja(slovar)
-Oseba.kdo
 
-class Skupina:
-    def __init__(self, ime, vsi_ljudje = [], vsi_stroski = {}, znesek = 0):
-        self.ime = ime
-        self.vsi_ljudje = vsi_ljudje
-        self.vsi_stroski = vsi_stroski
-        self.znesek = znesek
-        
-    def dodaj_cloveka(self, kdo):
-        if kdo in self.vsi_ljudje:
-            print('Uporabnik že obstaja.')
-        else:
-            self.vsi_ljudje.append(kdo)
-        
-    def odstrani_cloveka(self, kdo):
-        if kdo not in self.vsi_ljudje:
-            print('Uporabnik ne obstaja.')
-        else:
-            self.vsi_ljudje.remove(kdo)
+    @classmethod
+    def iz_slovarja(cls, slovar):
+        return cls(
+            datum=date.fromisoformat(slovar["datum"]),
+            cena=slovar["cena"],
+            kaj=slovar["kaj"],
+        )
     
-    def dodaj_strosek(self, kdo, cena, kaj):
-        strosek = (date.today(), cena, kaj)
-        self.znesek += cena
-        if kdo not in self.vsi_stroski:
-            self.vsi_stroski[kdo] = [strosek]
-        else:
-            if strosek in self.vsi_stroski.get(kdo):
-                print('Strošek že obstaja.')
-            else:
-                self.vsi_stroski[kdo].append(strosek)
-        
-    def odstrani_strosek(self, kdo, cena, kaj):
-        strosek = (date.today().isoformat(), cena, kaj)
-        self.znesek -= cena
-        if strosek not in self.vsi_stroski.get(kdo):
-            print('Strošek ne obstaja.')
-        else:
-            self.vsi_stroski[kdo].remove(strosek)
+@dataclass
+class Oseba:
+    ime: str
+    stroski: List[Strosek]
     
-    def koliko_ljudi(self):
-        return len(self.vsi_ljudje)
+    def spremeni_ime(self, novo_ime):
+        self.ime = novo_ime
+    
+    def dodaj_strosek(self, strosek):
+        if strosek in self.stroski:
+            print("Strošek že obstaja.")
+        else:
+            self.stroski.append(strosek)
+        
+    def odstrani_strosek(self, strosek):
+        if strosek not in self.stroski:
+            print("Strošek ne obstaja.")
+        else:
+            self.stroski.remove(strosek)      
             
-    def koliko_je_placal(self, kdo):
-        stroski = self.vsi_stroski
-        if kdo not in self.vsi_ljudje:
-            print('Uporabnik ne obstaja.')
-        elif kdo not in stroski:
-            return 0
+    def koliko_je_placal(self):
+        vsota = 0
+        for strosek in self.stroski:
+            vsota += strosek.cena()
+        return vsota  
+    
+    def koliko_potrebuje(self):
+        potrebno = Skupina.cena_na_osebo()
+        je_placal = self.koliko_je_placal
+        skupno = potrebno - je_placal
+        if skupno < 0:
+            return f'Dobiti moraš {skupno} €.'
+        elif skupno > 0:
+            return f'Dolžen si {skupno} €.'
         else:
-            placano = 0
-            sez = stroski.get(kdo)
-            for strosek in sez:
-                placano += strosek[1]
-            return placano
+            return f'Bravo, nimaš dolgov!'
         
-    #def koliko_placa_vsak(self):
-    #    znesek = self.znesek
-    #    v_skupini = self.koliko_ljudi()
+    def v_slovar(self):
+        return {
+            "ime": self.ime,
+            "stroski": [strosek.v_slovar() for strosek in self.stroski],
+        }
+
+    @classmethod
+    def iz_slovarja(cls, slovar):
+        return cls(
+            ime=slovar["ime"],
+            stroski=[Strosek.iz_slovarja(sl) for sl in slovar["stroski"]],
+        )
+
+@dataclass
+class Skupina:
+    ime: str
+    ljudje: List[Oseba]
+    
+    def spremeni_ime(self, novo_ime):
+        self.ime = novo_ime
+    
+    def dodaj_osebo(self, oseba):
+        if oseba in self.ljudje:
+            print("Oseba že obstaja.")
+        else:
+            self.ljudje.append(oseba)
+        
+    def odstrani_osebo(self, oseba):
+        if oseba in self.ljudje:
+            print("Oseba ne obstaja.")
+        else:
+            self.ljudje.remove(oseba)
+    
+    def st_ljudi(self):
+        return len(self.ljudje)
+    
+    def skupni_stroski(self):
+        vsota = 0
+        for oseba in self.ljudje:
+            koliko = oseba.koliko_je_placal()
+            vsota += koliko
+        return vsota
+    
+    def cena_na_osebo(self):
+        return round(self.skupni_stroski / self.st_ljudi, 2) 
     
     def v_slovar(self):
         return {
             "ime": self.ime,
-            "vsi_ljudje": self.vsi_ljudje,
-            "vsi_stroski": self.vsi_stroski,
-            "znesek": self.znesek,
+            "ljudje": [oseba.v_slovar() for oseba in self.ljudje],
         }
+
+    @classmethod
+    def iz_slovarja(cls, slovar):
+        return cls(
+            ime=slovar["ime"],
+            ljudje=[Oseba.iz_slovarja(sl) for sl in slovar["ljudje"]],
+        ) 
     
-    @staticmethod
-    def iz_slovarja(slovar):
-        return Skupina(
-            slovar["ime"],
-            [Oseba.iz_slovarja(slovar_ljudi) for slovar_ljudi in slovar["osebe"]],
-            slovar["vsi_stroski"],
-            slovar["znesek"],
-        )
+@dataclass
+class Stanje:
+    skupine: List[Skupina]
     
-class Stanje():
-    def __init__(self, skupine):
-        self.skupine = skupine
-        
     def dodaj_skupino(self, skupina):
-        self.skupine.append(skupina)
+        if skupina in self.skupine:
+            print("Skupina že obstaja.")
+        else:
+            self.ljudje.append(skupina)
+        
+    def odstrani_skupino(self, skupina):
+        if skupina in self.ljudje:
+            print("Skupina ne obstaja.")
+        else:
+            self.ljudje.remove(skupina)
+    
+    def koliko_skupin(self):
+        return len(self.skupine)
     
     def v_slovar(self):
         return {
             "skupine": [skupina.v_slovar() for skupina in self.skupine],
         }
 
-    @staticmethod
-    def iz_slovarja(slovar):
-        stanje = Stanje(
-            [
-                Skupina.iz_slovarja(sl_skupine)
-                for sl_skupine in slovar["skupine"]
-            ]
+    @classmethod
+    def iz_slovarja(cls, slovar):
+        return cls(
+            skupine=[Skupina.iz_slovarja(sl) for sl in slovar["skupine"]],
         )
-        return stanje
+    
+    def v_datoteko(self, ime_datoteke):
+        with open(ime_datoteke, "w") as dat:
+            json.dump(self.v_slovar(), dat, ensure_ascii=False, indent=4)
 
-    def shrani_v_datoteko(self, datoteka):
-        with open(datoteka, "w") as dat:
-            slovar = self.v_slovar()
-            json.dump(slovar, dat, indent=4, ensure_ascii=False)
-
-    @staticmethod
-    def preberi_iz_datoteke(datoteka):
-        with open(datoteka) as dat:
-            slovar = json.load(dat)
-            return Stanje.iz_slovarja(slovar)
+    @classmethod
+    def iz_datoteke(cls, ime_datoteke):
+        with open(ime_datoteke) as dat:
+            return cls.iz_slovarja(json.load(dat))
