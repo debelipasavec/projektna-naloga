@@ -1,0 +1,24 @@
+% rebase("base.html")
+
+<header>
+    <h1>Deljenje stroškov</h1>
+
+    <p>Skupni stroški: {{ stanje.skupni_stroski() }} € </p>
+    <p>Stroški na osebo: {{ stanje.cena_na_osebo() }} €/oseba</p>
+</header>
+
+<main>
+    <p>V skupini so:</p>
+    <ul>
+        % for id_osebe, oseba in enumerate(stanje.ljudje):
+        <li>
+            <a href="oseba/{{ id_osebe }}/">{{ oseba.ime }}</a>
+            <form action="/dodaj/{{ id_osebe }}/" method="POST">
+                <input name="cena" placeholder="Cena">
+                <input name="kaj" placeholder="Kaj">
+                <button>Dodaj</button>
+            </form>
+        </li>
+        % end
+    </ul>
+</main>
