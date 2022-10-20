@@ -5,21 +5,56 @@
 </header>
 
 <main>
-    <p>Seznam stroškov:</p>
     <ul>
-        <table>
-            <tr>
-                <th>Datum</th>
-                <th>Cena</th>
-                <th>Kaj</th>
-            </tr>
-            % for strosek in oseba.stroski:
-            <tr>
-                <td> {{ strosek.datum }} </td>
-                <td> {{ strosek.cena }} </td>
-                <td> {{ strosek.kaj}} </td>
-            </tr>
-            % end
+        <table class="centered">
+            <thead>
+                <tr>
+                    <form method="POST" action="/dodaj-strosek/{{id_osebe}}/">
+                        <td></td>
+                        <td>
+                            <div class="control has-icons-left">
+                                <input class="input is-small" type="text" name="datum" placeholder="LLLL-MM-DD">
+                                <label for="datum">Datum</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="control has-icons-left">
+                                <input class="input is-small" type="text" name="cena" placeholder="0.00">
+                                <label for="cena">Cena</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="control has-icons-left">
+                                <input class="input is-small" type="text" name="kaj" placeholder="karte">
+                                <label for="kaj">Kaj</label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="control">
+                                <button class="btn waves-effect waves-light" type="submit" name="action">Dodaj</button>
+                            </div>
+                        </td>
+                    </form>
+                </tr>
+            </thead>
+        </table>
+        <table class="centered">
+            <thead>
+                <tr class="table-secondary">
+                    <th scope="col">Datum</th>
+                    <th scope="col">Cena</th>
+                    <th scope="col">Kaj</th>
+                </tr>
+            </thead>
+            <tbody>
+                % for strosek in oseba.stroski:
+                <tr>
+                    <td> {{ strosek.datum }} </td>
+                    <td> {{ strosek.cena }} </td>
+                    <td> {{ strosek.kaj}} </td>
+                </tr>
+                % end
+            </tbody>
         </table>
     </ul>
 </main>
