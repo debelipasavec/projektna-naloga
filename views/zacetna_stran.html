@@ -8,17 +8,18 @@
 </header>
 
 <main>
-    <p>V skupini so:</p>
-    <ul>
-        % for id_osebe, oseba in enumerate(stanje.ljudje):
-        <li>
-            <a href="oseba/{{ id_osebe }}/">{{ oseba.ime }}</a>
-            <form action="/dodaj/{{ id_osebe }}/" method="POST">
-                <input name="cena" placeholder="Cena">
-                <input name="kaj" placeholder="Kaj">
-                <button>Dodaj</button>
-            </form>
-        </li>
-        % end
-    </ul>
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs tabs-fixed-width tab-demo z-depth-1">
+                % for id_osebe, oseba in enumerate(ljudje):
+                <li class="tab">
+                    <a href="oseba/{{ id_osebe }}/">{{ oseba.ime }}</a>
+                </li>
+                % end
+                <ul class="tab">
+                    <li><a href="/dodaj-osebo/">Dodaj osebo</a></li>
+                </ul>
+            </ul>
+        </div>
+    </div>
 </main>
