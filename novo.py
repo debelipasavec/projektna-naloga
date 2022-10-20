@@ -42,25 +42,18 @@ class Oseba:
         if strosek not in self.stroski:
             print("Strošek ne obstaja.")
         else:
-            self.stroski.remove(strosek)      
+            self.stroski.remove(strosek)
+    
+    def premakni_strosek(self, other, strosek):
+        self.odstrani_strosek(strosek)
+        other.dodaj_strosek(strosek)
             
     def koliko_je_placal(self):
         vsota = 0
         for strosek in self.stroski:
             vsota += strosek.cena()
         return vsota  
-    
-    def koliko_potrebuje(self):
-        potrebno = Skupina.cena_na_osebo()
-        je_placal = self.koliko_je_placal
-        skupno = potrebno - je_placal
-        if skupno < 0:
-            return f'Dobiti moraš {skupno} €.'
-        elif skupno > 0:
-            return f'Dolžen si {skupno} €.'
-        else:
-            return f'Bravo, nimaš dolgov!'
-        
+          
     def v_slovar(self):
         return {
             "ime": self.ime,
@@ -75,80 +68,65 @@ class Oseba:
         )
 
 @dataclass
-class Skupina:
-    ime: str
+class Stanje:
     ljudje: List[Oseba]
-    
-    def spremeni_ime(self, novo_ime):
-        self.ime = novo_ime
-    
+        
     def dodaj_osebo(self, oseba):
         if oseba in self.ljudje:
             print("Oseba že obstaja.")
         else:
             self.ljudje.append(oseba)
+            return len(self.ljudje) - 1
         
     def odstrani_osebo(self, oseba):
         if oseba in self.ljudje:
             print("Oseba ne obstaja.")
         else:
             self.ljudje.remove(oseba)
+            
+    def preveri_osebo(self, nova_oseba):
+        for oseba in self.ljudje:
+            if oseba.ime == nova_oseba.ime:
+                return {'ime': "Oseba že obstaja."}
+    
+    def dodaten_strosek(self, datum, cena, kaj, ime):
+        strosek = Strosek(datum, cena, kaj)
+        ime.dodaj_strosek(strosek)
     
     def st_ljudi(self):
         return len(self.ljudje)
     
     def skupni_stroski(self):
-        vsota = 0
-        for oseba in self.ljudje:
-            koliko = oseba.koliko_je_placal()
-            vsota += koliko
-        return vsota
+        return format(round(sum(oseba.koliko_je_placal() for oseba in self.ljudje), 2), '.2f')
+        
     
     def cena_na_osebo(self):
-        return round(self.skupni_stroski / self.st_ljudi, 2) 
+        stroski = sum(oseba.koliko_je_placal() for oseba in self.ljudje)
+        dol = len(self.ljudje)
+        return round(stroski / dol, 2)
+        #return format(round(stroski / dol, 2), '.2f') 
+    
+    def koliko_potrebuje(self, ime):
+        potrebno = Stanje.cena_na_osebo(self)
+        je_placal = ime.koliko_je_placal()
+        skupno = round(potrebno - je_placal, 2)
+        if skupno < 0:
+            return f'Dobiti moraš {- skupno} €.'
+        elif skupno > 0:
+            return f'Dati moraš {skupno} €.'
+        else:
+            return f'Bravo, nimaš dolgov!'
     
     def v_slovar(self):
         return {
-            "ime": self.ime,
             "ljudje": [oseba.v_slovar() for oseba in self.ljudje],
         }
 
     @classmethod
     def iz_slovarja(cls, slovar):
         return cls(
-            ime=slovar["ime"],
             ljudje=[Oseba.iz_slovarja(sl) for sl in slovar["ljudje"]],
         ) 
-    
-@dataclass
-class Stanje:
-    skupine: List[Skupina]
-    
-    def dodaj_skupino(self, skupina):
-        if skupina in self.skupine:
-            print("Skupina že obstaja.")
-        else:
-            self.ljudje.append(skupina)
-        
-    def odstrani_skupino(self, skupina):
-        if skupina in self.ljudje:
-            print("Skupina ne obstaja.")
-        else:
-            self.ljudje.remove(skupina)
-    
-    def koliko_skupin(self):
-        return len(self.skupine)
-    
-    def v_slovar(self):
-        return {
-            "skupine": [skupina.v_slovar() for skupina in self.skupine],
-        }
-
-    @classmethod
-    def iz_slovarja(cls, slovar):
-        return cls(
-            skupine=[Skupina.iz_slovarja(sl) for sl in slovar["skupine"]],
-        )
     
     def v_datoteko(self, ime_datoteke):
         with open(ime_datoteke, "w") as dat:
@@ -158,3 +136,12 @@ class Stanje:
     def iz_datoteke(cls, ime_datoteke):
         with open(ime_datoteke) as dat:
             return cls.iz_slovarja(json.load(dat))
+
+
+nina = Oseba('Nina', [Strosek(date(2022, 4, 23), 20.4, 'hrana'), Strosek(date(2022, 4, 26), 4, 'karte')])
+zala = Oseba('Zala', [])
+
+flus = Oseba('Flus', [Strosek(date(2022, 5, 3), 1, 'kava'), Strosek(date(2022, 2, 26), 15.4, 'krana')])
+crt = Oseba('Crt', [Strosek(date(2022, 4, 6), 7.5, 'mleko')])
+
+primer_stanja = Stanje([nina, zala, flus, crt])
