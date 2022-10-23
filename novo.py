@@ -43,16 +43,12 @@ class Oseba:
             print("Strošek ne obstaja.")
         else:
             self.stroski.remove(strosek)
-    
-    def premakni_strosek(self, other, strosek):
-        self.odstrani_strosek(strosek)
-        other.dodaj_strosek(strosek)
             
     def koliko_je_placal(self):
         vsota = 0
         for strosek in self.stroski:
             vsota += strosek.cena()
-        return vsota  
+        return vsota 
           
     def v_slovar(self):
         return {
@@ -89,16 +85,11 @@ class Stanje:
             if oseba.ime == nova_oseba.ime:
                 return {'ime': "Oseba že obstaja."}
     
-    def dodaten_strosek(self, datum, cena, kaj, ime):
-        strosek = Strosek(datum, cena, kaj)
-        ime.dodaj_strosek(strosek)
-    
     def st_ljudi(self):
         return len(self.ljudje)
     
     def skupni_stroski(self):
         return format(round(sum(oseba.koliko_je_placal() for oseba in self.ljudje), 2), '.2f')
-        
     
     def cena_na_osebo(self):
         stroski = sum(oseba.koliko_je_placal() for oseba in self.ljudje)
@@ -136,12 +127,3 @@ class Stanje:
     def iz_datoteke(cls, ime_datoteke):
         with open(ime_datoteke) as dat:
             return cls.iz_slovarja(json.load(dat))
-
-
-nina = Oseba('Nina', [Strosek(date(2022, 4, 23), 20.4, 'hrana'), Strosek(date(2022, 4, 26), 4, 'karte')])
-zala = Oseba('Zala', [])
-
-flus = Oseba('Flus', [Strosek(date(2022, 5, 3), 1, 'kava'), Strosek(date(2022, 2, 26), 15.4, 'krana')])
-crt = Oseba('Crt', [Strosek(date(2022, 4, 6), 7.5, 'mleko')])
-
-primer_stanja = Stanje([nina, zala, flus, crt])
