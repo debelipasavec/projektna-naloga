@@ -1,7 +1,32 @@
-% rebase("base.html")
+<!DOCTYPE html>
+<html lang="en">
 
-<form method="POST">
-    <input type="text" placeholder="Uporabniško ime" name="uporabnisko_ime">
-    <input type="password" placeholder="Geslo" name="geslo">
-    <button class="btn waves-effect waves-light" type="submit" name="action">Pošlji</button>
-</form>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deljenje stroškov</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        div.ex1 {
+            width: 500px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">Dobrodošli v najboljšem programu</a>
+        </div>
+    </nav>
+    <div class="ex1">
+        <form method="POST">
+            <input type="text" placeholder="Uporabniško ime" name="uporabnisko_ime">
+            <input type="password" placeholder="Geslo" name="geslo">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Pošlji</button>
+        </form>
+    </div> 
+</body>
+
+</html>
