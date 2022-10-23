@@ -12,10 +12,13 @@
                 <p>Tvoji trenutni stroški znašajo {{ oseba.koliko_je_placal() }} €.</p>
                 <p>Ali moraš dobiti ali dati? {{ stanje.koliko_potrebuje(oseba) }}</p>
             </div>
+            <div class="card-action">
+                <a href="/izbrisi-osebo/oseba/{{ id_osebe }}/">Odstrani osebo</a>
+                <a href="/spremeni-ime/{{ id_osebe }}/">Spremeni ime</a>
+            </div>
         </div>
     </div>
 </div>
-
 <main>
     <ul>
         <table class="centered">
