@@ -1,15 +1,15 @@
-from bottle import route, run, template, TEMPLATE_PATH, post, request, redirect
+from bottle import route, run, template, TEMPLATE_PATH, post, request, redirect, response
 from datetime import date
 import novo
 from novo import Stanje
+import os
 
-TEMPLATE_PATH.insert(0,'\\Users\\janko\\Desktop\\Projektna\\views')
+TEMPLATE_PATH.insert(0,"\\Users\\janko\\Desktop\\Projektna\\views")
 
 SIFRIRNI_KLJUC = "To je poseben šifrirni ključ"
 
 def ime_uporabnikove_datoteke(uporabnisko_ime):
     return f"stanja_uporabnikov\\{uporabnisko_ime}.json"
-
 
 def stanje_trenutnega_uporabnika():
     uporabnisko_ime = request.get_cookie("uporabnisko_ime", secret=SIFRIRNI_KLJUC)
@@ -31,13 +31,13 @@ def shrani_stanje_trenutnega_uporabnika(stanje):
     ime_datoteke = ime_uporabnikove_datoteke(uporabnisko_ime)
     stanje.v_datoteko(ime_datoteke)
 
-@route('/prijava/', method='GET')
+@route("/prijava/", method="GET")
 def prijava_get():
     return template(
         "prijava.html"
     )
 
-@route('/prijava/', method='POST')
+@route("/prijava/", method="POST")
 def prijava_post():
     uporabnisko_ime = request.forms.getunicode("uporabnisko_ime")
     geslo = request.forms.getunicode("geslo")
@@ -47,7 +47,7 @@ def prijava_post():
     else:
         return "Napaka ob prijavi"
 
-@route('/odjava/', method='POST')
+@route("/odjava/")
 def odjava_post():
     response.delete_cookie("uporabnisko_ime", path="/")
     redirect("/")
@@ -55,45 +55,58 @@ def odjava_post():
 def url_osebe(id_osebe):
     return f"/oseba/{id_osebe}/"
     
-@route('/', method='GET')
+@route("/", method="GET")
 def zacetna_stran():
-    stanje = stanje_trenutnega_uporabnika()
-    return template(
-        'zacetna_stran.html',
-        stanje=stanje,
-        ljudje=stanje.ljudje,
-    )
-
-@route('/oseba/<id_osebe:int>/', method='GET')
+    if stanje_trenutnega_uporabnika():
+        stanje = stanje_trenutnega_uporabnika()
+        return template(
+            'zacetna_stran.html',
+            stanje=stanje,
+            ljudje=stanje.ljudje,
+        )
+    else:
+        stanje = novo.Stanje([])
+        
+@route("/oseba/<id_osebe:int>/", method="GET")
 def oseba(id_osebe):
     stanje = stanje_trenutnega_uporabnika()
     return template(
-        'oseba.html',
+        "oseba.html",
         stanje = stanje,
         id_osebe=id_osebe,
         oseba=stanje.ljudje[id_osebe],
     )
 
-@route('/dodaj-strosek/<id_osebe:int>/', method='POST')
+@route("/napacen-strosek/")
+def napacen_strosek():
+    return template("napacen_strosek.html")
+
+@route("/dodaj-strosek/<id_osebe:int>/", method="POST")
 def dodaj_strosek(id_osebe):
     stanje = stanje_trenutnega_uporabnika()
     oseba = stanje.ljudje[id_osebe]
-    id_osebe = id_osebe
-    datum = date.fromisoformat(request.forms['datum'])
-    cena = request.forms['cena']
-    kaj = request.forms.getunicode('kaj')
-    strosek = Strosek(datum, cena, kaj)
-    oseba.dodaj_strosek(strosek)
-    shrani_stanje_trenutnega_uporabnika()(stanje)
-    redirect(url_osebe(id_osebe))
+    if request.forms['datum'] == "":
+        danes = date.today()
+        datum = date.fromisoformat(danes.strftime("%Y-%m-%d"))
+    else:
+        datum = date.fromisoformat(request.forms['datum'])
+    cena = request.forms["cena"]
+    kaj = request.forms.getunicode("kaj")
+    if kaj == '' or cena == '':
+        redirect('/napacen-strosek/')
+    else:    
+        strosek = Strosek(datum, cena, kaj)
+        oseba.dodaj_strosek(strosek)
+        shrani_stanje_trenutnega_uporabnika()(stanje)
+        redirect(url_osebe(id_osebe))
 
-@route("/dodaj-osebo/", method='GET')
+@route("/dodaj-osebo/", method="GET")
 def dodaj_osebo_get():
     return template(
         "dodaj_osebo.html", napake={}, polja={}
     )
-    
-@route("/dodaj-osebo/", method='POST')
+
+@route("/dodaj-osebo/", method="POST")
 def dodaj_osebo_post():
     stanje = stanje_trenutnega_uporabnika()
     ime = request.forms.getunicode("ime")
@@ -105,7 +118,28 @@ def dodaj_osebo_post():
     else:
         id_osebe = stanje.dodaj_osebo(oseba)
         shrani_stanje_trenutnega_uporabnika()(stanje)
-        redirect(/url_osebe(id_osebe))
+        redirect(/url_osebe(id_osebe)) 
+
+@route("/spremeni-ime/<id_osebe:int>/", method="GET")
+def spremeni_ime_get(id_osebe):
+    return template(
+        "spremeni_ime.html", napake={}, polja={}
+    )
+
+@route("/spremeni-ime/<id_osebe:int>/", method="POST")
+def spremeni_ime(id_osebe):
+    stanje = stanje_trenutnega_uporabnika()
+    oseba = stanje.ljudje[id_osebe]
+    novo_ime = request.forms.getunicode("novo ime")
+    nova_oseba = Oseba(novo_ime, stroski=[])
+    napake = stanje.preveri_osebo(nova_oseba)
+    if napake:
+        polja = {"ime": novo_ime}
+        return template("dodaj_osebo.html", napake=napake, polja=polja)
+    else:
+        oseba.spremeni_ime(novo_ime)
+        shrani_stanje_trenutnega_uporabnika(stanje)
+        redirect(url_osebe(id_osebe))
         
 @route("/analiza/")
 def analiza():
@@ -115,5 +149,13 @@ def analiza():
         stanje=stanje,
         ljudje=stanje.ljudje,
     )
+    
+@route("/izbrisi-osebo/oseba/<id_osebe:int>/")
+def izbrisi_osebo(id_osebe):
+    stanje = stanje_trenutnega_uporabnika()
+    oseba = stanje.ljudje[id_osebe]
+    stanje.odstrani_osebo(oseba)
+    shrani_stanje_trenutnega_uporabnika(stanje)
+    redirect("/")
 
-run(host='localhost', port=8080, reloader=True, debug=True)
+run(host="localhost", port=8080, reloader=True, debug=True)
