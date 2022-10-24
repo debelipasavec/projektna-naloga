@@ -6,11 +6,15 @@ Predstavila vam bom projektno nalogo, ki sem jo napisala (ali skodirala - kakor 
 
 Prav gotovo ste se kdaj odpravili na potovanje ali izlet s prijatelji. Skupaj ste se zelo zabavali, počeli norčije (ali mirno uživali na plaži), ko pa je prišlo do deljenja stroškov, je vaš pogovor izgledal nekako takole:
 
-Marko: Janez, Mojca, kaj bi mi vrnila za karto za živalski vrt, ki sem vama jo plačal? Malo mi zmanjkuje denarja, zvečer bi pa rad šel v disko ...
-Janez: Seveda, se mogoče spomniš, koliko je stala? Lahko delimo...
-Mojca (se vrnine v besedo): Če smo že pri vračanju, pravzaprav sta mi vidva OBA dolžna, saj sem vama plačala večerjo v tisti fini restavraciji! Skoraj sem obubožala, ko sta "pozabila" denarnico v hotelu!
-Janez: No, ne tako hitro Mojca, ti lisica!!! Tudi jaz sem plačal tisti nakup v zlatarni, kjer smo si kar privoščili! 
-Marko: ... Ne da se mi računati vsega tega, vrjamem pa, da se tudi vama ne - smo samo ubogi študentje, ki želimo uživati v počitnicah brez matematike ... Ko bi le obstajal kak program, ki bi nam pomagal ...
+__Marko__: Janez, Mojca, kaj bi mi vrnila za karto za živalski vrt, ki sem vama jo plačal? Malo mi zmanjkuje denarja, zvečer bi pa rad šel v disko ...
+
+__Janez__: Seveda, se mogoče spomniš, koliko je stala? Lahko delimo...
+
+__Mojca__ (se vrnine v besedo): Če smo že pri vračanju, pravzaprav sta mi vidva OBA dolžna, saj sem vama plačala večerjo v tisti fini restavraciji! Skoraj sem obubožala, ko sta "pozabila" denarnico v hotelu!
+
+__Janez__: No, ne tako hitro Mojca, ti lisica!!! Tudi jaz sem plačal tisti nakup v zlatarni, kjer smo si kar privoščili! 
+
+__Marko__: ... Ne da se mi računati vsega tega, vrjamem pa, da se tudi vama ne - smo samo ubogi študentje, ki želimo uživati v počitnicah brez matematike ... Ko bi le obstajal kak program, ki bi nam pomagal ...
 
 In na srečo Marka, Janeza in Mojce tak program le obstaja. Že slišim, kako vzdihujejo od sreče.
 
