@@ -95,7 +95,6 @@ class Stanje:
         stroski = sum(oseba.koliko_je_placal() for oseba in self.ljudje)
         dol = len(self.ljudje)
         return round(stroski / dol, 2)
-        #return format(round(stroski / dol, 2), '.2f') 
     
     def koliko_potrebuje(self, ime):
         potrebno = Stanje.cena_na_osebo(self)
