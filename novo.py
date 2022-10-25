@@ -119,10 +119,10 @@ class Stanje:
         ) 
     
     def v_datoteko(self, ime_datoteke):
-        with open(ime_datoteke, "w") as dat:
+        with open(ime_datoteke, "w", encoding='utf-8') as dat:
             json.dump(self.v_slovar(), dat, ensure_ascii=False, indent=4)
 
     @classmethod
     def iz_datoteke(cls, ime_datoteke):
-        with open(ime_datoteke) as dat:
+        with open(ime_datoteke, encoding='utf-8') as dat:
             return cls.iz_slovarja(json.load(dat))
