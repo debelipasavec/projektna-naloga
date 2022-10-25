@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deljenje stroškov</title>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -12,25 +12,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
         $(document).ready(function() {
-            $('.tabs').tabs();
+            $(".tabs").tabs();
         });
     </script>
+    <style>
+        div.ex1 {
+            width: 500px;
+            margin: auto;
+        }
+    </style>
 </head>
 
 <body>
-     <nav>
+    <nav>
         <div class="nav-wrapper">
             <a href="/" class="brand-logo center"><i class="fa fa-home" aria-hidden="true "></i>  Domov</a>
             <ul id="nav-mobile " class="left hide-on-med-and-down ">
-                <li><a href="/analiza/ "><i class="fa fa-bar-chart"></i>  Analiza</a></li>
+                <li><a href="/analiza/"><i class="fa fa-bar-chart"></i>  Analiza</a></li>
             </ul>
             <ul id="nav-mobile " class="right hide-on-med-and-down ">
-                <li><a><i class="fa fa-sign-in "></i>  Prijava</a></li>
-                <li><li><a href="/odjava/"><i class="fa fa-sign-out "></i>  Odjava</a></li>
+                <li><a href="/odjava/"><i class="fa fa-sign-out "></i>  Odjava</a></li>
+                <li><a href="/prijava/"><i class="fa fa-sign-in "></i>  Prijava</a></li>
             </ul>
         </div>
     </nav>
-
     <section class="section ">
         {{!base}}
     </section>
