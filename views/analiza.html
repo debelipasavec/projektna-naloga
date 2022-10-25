@@ -2,22 +2,29 @@
 
 <header>
     <h1>Deljenje stroškov</h1>
-
-    <p>Skupni stroški: {{ stanje.skupni_stroski() }} € </p>
-    <p>Stroški na osebo: {{ stanje.cena_na_osebo() }} €/oseba</p>
-    <div class="row">
-        <div class="col s12">
-            <ul class="tabs">
-                % for id_osebe, oseba in enumerate(ljudje):
-                <li class="tab"><a href="#oseba/{{ id_osebe }}">{{ oseba.ime }}</a></li>
-                % end
-            </ul>
+    % if stanje.cena_na_osebo() == None:
+        <div class="ex1">
+            Trenutno še ne morem opraviti analize, ker v skupini ni ljudi. Dodajte jih <a href="/dodaj-osebo/">tukaj</a>.
         </div>
-        % for id_osebe, oseba in enumerate(ljudje):
-        <div id="oseba/{{ id_osebe }}" class="col s12" style="display: none;">
-            <p>Tvoji trenutni stroški znašajo {{ oseba.koliko_je_placal() }} €.</p>
-            <p>Ali moraš dobiti ali dati? {{ stanje.koliko_potrebuje(oseba) }}</p>
+    % else:
+        <p>Skupni stroški: {{ stanje.skupni_stroski() }} € </p>
+        <p>Stroški na osebo: {{ stanje.cena_na_osebo() }} €/oseba</p>
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    % for id_osebe, oseba in enumerate(ljudje):
+                        <li class="tab">
+                            <a href="#oseba/{{ id_osebe }}">{{ oseba.ime }}</a>
+                        </li>
+                    % end
+                </ul>
+            </div>
+            % for id_osebe, oseba in enumerate(ljudje):
+                <div id="oseba/{{ id_osebe }}" class="col s12" style="display: none;">
+                    <p>Tvoji trenutni stroški znašajo {{ oseba.koliko_je_placal() }} €.</p>
+                    <p>Ali moraš dobiti ali dati? {{ stanje.koliko_potrebuje(oseba) }}</p>
+                </div>
+            % end
         </div>
-        % end
-    </div>
+    % end
 </header>
