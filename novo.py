@@ -29,6 +29,9 @@ class Oseba:
     ime: str
     stroski: List[Strosek]
     
+    def __str__(self):
+        return f'{self.ime}: {self.koliko_je_placal()} €'
+    
     def spremeni_ime(self, novo_ime):
         self.ime = novo_ime
     
@@ -42,14 +45,11 @@ class Oseba:
         if strosek not in self.stroski:
             print("Strošek ne obstaja.")
         else:
-            self.stroski.remove(strosek)
+            self.stroski.remove(strosek)   
             
     def koliko_je_placal(self):
-        vsota = 0
-        for strosek in self.stroski:
-            vsota += strosek.cena()
-        return vsota 
-          
+        return round(sum(float(strosek.cena) for strosek in self.stroski), 2) 
+            
     def v_slovar(self):
         return {
             "ime": self.ime,
@@ -75,10 +75,7 @@ class Stanje:
             return len(self.ljudje) - 1
         
     def odstrani_osebo(self, oseba):
-        if oseba in self.ljudje:
-            print("Oseba ne obstaja.")
-        else:
-            self.ljudje.remove(oseba)
+        self.ljudje.remove(oseba)
             
     def preveri_osebo(self, nova_oseba):
         for oseba in self.ljudje:
@@ -94,18 +91,21 @@ class Stanje:
     def cena_na_osebo(self):
         stroski = sum(oseba.koliko_je_placal() for oseba in self.ljudje)
         dol = len(self.ljudje)
-        return round(stroski / dol, 2)
+        if dol == 0:
+            return None
+        else:
+            return round(stroski / dol, 2)
     
     def koliko_potrebuje(self, ime):
         potrebno = Stanje.cena_na_osebo(self)
         je_placal = ime.koliko_je_placal()
-        skupno = round(potrebno - je_placal, 2)
+        skupno = round(potrebno - je_placal, 2) 
         if skupno < 0:
             return f'Dobiti moraš {- skupno} €.'
         elif skupno > 0:
             return f'Dati moraš {skupno} €.'
         else:
-            return f'Bravo, nimaš dolgov!'
+            return f'Bravo, nimaš dolgov!' 
     
     def v_slovar(self):
         return {
