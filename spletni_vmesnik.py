@@ -60,7 +60,7 @@ def zacetna_stran():
     if stanje_trenutnega_uporabnika():
         stanje = stanje_trenutnega_uporabnika()
         return template(
-            'zacetna_stran.html',
+            "zacetna_stran.html",
             stanje=stanje,
             ljudje=stanje.ljudje,
         )
@@ -79,25 +79,27 @@ def oseba(id_osebe):
 
 @route("/napacen-strosek/")
 def napacen_strosek():
-    return template("napacen_strosek.html")
+    return template(
+        "napacen_strosek.html"
+    )
 
 @route("/dodaj-strosek/<id_osebe:int>/", method="POST")
 def dodaj_strosek(id_osebe):
     stanje = stanje_trenutnega_uporabnika()
     oseba = stanje.ljudje[id_osebe]
-    if request.forms['datum'] == "":
+    if request.forms["datum"] == "":
         danes = date.today()
         datum = date.fromisoformat(danes.strftime("%Y-%m-%d"))
     else:
-        datum = date.fromisoformat(request.forms['datum'])
+        datum = date.fromisoformat(request.forms["datum"])
     cena = request.forms["cena"]
     kaj = request.forms.getunicode("kaj")
-    if kaj == '' or cena == '':
-        redirect('/napacen-strosek/')
+    if kaj == "" or cena == "":
+        redirect("/napacen-strosek/")
     else:    
         strosek = Strosek(datum, cena, kaj)
         oseba.dodaj_strosek(strosek)
-        shrani_stanje_trenutnega_uporabnika()(stanje)
+        shrani_stanje_trenutnega_uporabnika(stanje)
         redirect(url_osebe(id_osebe))
 
 @route("/dodaj-osebo/", method="GET")
@@ -117,8 +119,8 @@ def dodaj_osebo_post():
         return template("dodaj_osebo.html", napake=napake, polja=polja)
     else:
         id_osebe = stanje.dodaj_osebo(oseba)
-        shrani_stanje_trenutnega_uporabnika()(stanje)
-        redirect(/url_osebe(id_osebe)) 
+        shrani_stanje_trenutnega_uporabnika(stanje)
+        redirect(url_osebe(id_osebe)) 
 
 @route("/spremeni-ime/<id_osebe:int>/", method="GET")
 def spremeni_ime_get(id_osebe):
@@ -130,7 +132,7 @@ def spremeni_ime_get(id_osebe):
 def spremeni_ime(id_osebe):
     stanje = stanje_trenutnega_uporabnika()
     oseba = stanje.ljudje[id_osebe]
-    novo_ime = request.forms.getunicode("novo ime")
+    novo_ime = request.forms.getunicode("ime")
     nova_oseba = Oseba(novo_ime, stroski=[])
     napake = stanje.preveri_osebo(nova_oseba)
     if napake:
@@ -158,4 +160,4 @@ def izbrisi_osebo(id_osebe):
     shrani_stanje_trenutnega_uporabnika(stanje)
     redirect("/")
 
-run(host="localhost", port=8080, reloader=True, debug=True)
+run(host="localhost", port=8080, reloader=True)
