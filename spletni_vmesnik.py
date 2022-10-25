@@ -1,7 +1,7 @@
-from bottle import route, run, template, TEMPLATE_PATH, post, request, redirect, response
+from bottle import route, run, template, TEMPLATE_PATH, request, redirect, response
 from datetime import date
 import novo
-from novo import Stanje
+from novo import Stanje, Oseba, Strosek
 import os
 
 TEMPLATE_PATH.insert(0,"\\Users\\janko\\Desktop\\Projektna\\views")
