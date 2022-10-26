@@ -1,6 +1,6 @@
 # Projektna naloga
 
-Predstavila vam bom projektno nalogo, ki sem jo napisala (ali skodirala - kakor vam je ljubše) pri predmetu Uvod v programiranje na Fakulteti za matematiko in fiziko, oddelek za Matematiko, Univerza v Ljubljani.
+Predstavila vam bom projektno nalogo, ki sem jo napisala (ali skodirala - kakor vam je ljubše) za končno nalogo pri predmetu Uvod v programiranje na Fakulteti za matematiko in fiziko, oddelek za Matematiko, Univerza v Ljubljani.
 
 ## Deljenje stroškov
 
@@ -8,7 +8,7 @@ Prav gotovo ste se kdaj odpravili na potovanje ali izlet s prijatelji. Skupaj st
 
 __Marko__: Janez, Mojca, kaj bi mi vrnila za karto za živalski vrt, ki sem vama jo plačal? Malo mi zmanjkuje denarja, zvečer bi pa rad šel v disko ...
 
-__Janez__: Seveda, se mogoče spomniš, koliko je stala? Lahko delimo...
+__Janez__: Seveda, se mogoče spomniš, koliko je stalo? Lahko delimo...
 
 __Mojca__ (se vrnine v besedo): Če smo že pri vračanju, pravzaprav sta mi vidva OBA dolžna, saj sem vama plačala večerjo v tisti fini restavraciji! Skoraj sem obubožala, ko sta "pozabila" denarnico v hotelu!
 
@@ -29,18 +29,19 @@ Biti dolžan pomeni na skupni (fizični) "kup" položiti določeno količino den
 
 Zagnati program je precej preprosto:
 * iz repozitorija si naložite zip datoteko,
-* odprete datoteko spletni_vmesnik.py v izbranem urejevalniku in
+* v (od-zipani) mapi si ustvarite podmapo stanja_uporabnikov (bi vam jo dodala že sama, pa GitHub ne dovoli ustvarjanja praznih map),
+* odprite datoteko spletni_vmesnik.py v izbranem urejevalniku in
   * v vrstici 7 popravite absolute path do datoteke views, ki je v sklopu datotek, ki ste si jih naložili
-    primer: TEMPLATE_PATH.insert(0,"\\Users\\mami\\Downloads\\Projektna\\views"),
-  * v vrstici 22 si morate prav tako popraviti absolute path, ki vas pripelje samo do mape, kamor ste si naložili mojo projektno
-    primer: os.chdir("\\Users\\oci\\Documents\\super\\kul\\program\\Projektna\\"),
+    primer: TEMPLATE_PATH.insert(0,"\\Users\\mami\\Downloads\\projektna-naloga\\views"),
+  * v vrstici 22 si morate prav tako popraviti absolute path, ki vas pripelje samo do mape, vkateri je vsebovana moja projektna. Na koncu dodajte še \\
+    primer: os.chdir("\\Users\\oci\\Documents\\super\\kul\\program\\projektna-naloga\\"),
 *  poženite datoteko in kliknite na povezavo, ki se vam izpiše v terminalu,
 *  odprla se vam bo spletna stran, kamor se morate prijaviti. Vaše uporabniško ime je kakršno vam srce poželi, geslo pa je uporabniško ime v drugo smer (npr. uporabniško ime je uporabnik, geslo pa kinbaropu).
 
 ## Težave
 
 Pri pisanju je bila edina velika težava, na katero sem naletela ta, da se mi spletni vmesnik ni poganjal iz mape, kjer so bile shranjene ostale datoteke. Razlog za to mi je neznan, težavo pa sem odpravila s tem, da sem 2x uporabila absolute path do map. 
-Druga težava pa je bila ta, da se mi Git na računalniku ni hotel pognati (pomoč sem poiskala tudi pri bratrancu, ki pa ga žal tudi ni znal "popraviti"). Torej sem datoteke na žalost morala nalagi samo preko GitHuba.
+Druga težava pa je bila ta, da se mi Git na računalniku ni hotel oz. ni znal pognati. Torej sem datoteke na žalost morala nalagi in popravljati preko GitHuba.
 
 ## Stil
 
